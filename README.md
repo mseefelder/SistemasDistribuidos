@@ -50,9 +50,11 @@ Um sistema *multi-threaded* baseado em *user-level threads* é um processo que s
 ## Questão 6
 
 Pode ocorrer, por exemplo, um *deadlock* na seguinte situação:
+
 1. A *thread T1* faz uma chamada `acquire()` e executa a linha `lock->interested[this_thread] = 1`;
 2. Ocorre uma **troca de contexto** para a *thread T2*;
 3. A *thread T2* faz uma chamada `acquire()` e executa a linha `lock->interested[this_thread] = 1`;
+
 A partir de agora, **ambas as *threads* ficam presas no loop de `while`**, pois ambas as posições de `lock->interested[]` são verdadeiras (`== 1`).
 
 ## Questão 7
