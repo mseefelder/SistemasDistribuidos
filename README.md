@@ -80,9 +80,52 @@ release(bool lock) {
 
 ## Questão 8
 
+Os padrões que podem ser impressos são sequências da combinação "ab", nessa ordem.
 
+Não pode haver *deadlock*, uma vez que, para escrever o "a", há de se passar em um semáforo binário (`s1`). Uma vez que esse semáforo foi passado ele só é reaberto após se passar por um segundo semáforo binário (`s2`), imprimir "b" e abrir o semáforo `s2`. Ambas as chamadas de `print()` estão dentro da região crítica de `s1` é serializada para acesso de uma *thread* por vez.
 
 ## Questão 9
+
+O código ficaria similar ao apresentado a seguir:
+
+Global
+
+```
+semaphore mutex = 0;
+semaphore empty = N;
+semaphore full = 0;
+```
+
+Produtor
+
+```
+void producer()
+{
+	wait(mutex)
+	wait(empty)
+		//região crítica:
+		//adiciona produto
+	signal(mutex)
+	signal(full)
+}
+```
+
+Consumidor
+
+```
+void consumer()
+{
+	wait(mutex)
+	wait(full)
+		//região crítica:
+		//retira produto
+	signal(mutex)
+	signal(empty)
+	//processa produto
+}
+```
+
+Nesse caso poderia ocorrer um *deadlock* na seguinte situação: Um consumidor é a primeira *thread C1* ativa e passa pelo `wait(mutex)`. Esse consumidor vai bloquear no `wait(full)` pois não há nenhum produto disponível. Todas as outras *threads* vão bloquear no primeiro `wait(mutex)`.
 
 
 
