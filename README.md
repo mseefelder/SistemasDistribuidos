@@ -219,7 +219,13 @@ Já na arquitetura **par-a-par** (P2P), todas as partes do sistema desempenham o
 
 ## Questão 18
 
+Sim, é possível, porém o cliente alterado depende de *optimistic unchokes* e/ou de *seeders* para receber seus *chunks*:
 
+* Da maneira que o protocolo BitTorrent funciona, de forma resumida, os *peers* que recebem *chunks* (pedaços dos arquivos solicitados) são aqueles que enviam *chunks* numa taxa mais alta para seus *peers*. Porém, a cada 30 segundos um *peer* aleatório é escolhido e passa a receber *chunks* (*optimistic unchoke*), o que só continua caso o mesmo corresponda enviando *chunks* a uma taxa alta.
+
+* Uma excessão é o caso de clientes que já possuem o arquivo inteiro (*seeders*), seus *peers* são escolhidos de acordo com a velocidade de *upload* que o cliente consegue manter com o *peer*.
+
+De qualquer maneira o download provavelmente seria muito mais lento do que se fosse utilizado um cliente com o protocolo BitTorrent original.
 
 -----
 
