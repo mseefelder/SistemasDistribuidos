@@ -195,13 +195,32 @@ Já na arquitetura **par-a-par** (P2P), todas as partes do sistema desempenham o
 
 ## Questão 13
 
+Na **forma iterativa**, quando um *host* quer saber um endereço IP, pergunta para o *Local Name Server*. Se o mesmo não souber, vai perguntar para o *Root Name Server* e se o mesmo não souber, vai retonar um endereço para o qual o pode repetir a pergunta (um *TLD Name Server*, por exemplo). Isso se repete até que seja encontrada a resposta, que é repassada para o *host*.
 
+Na **forma recursiva**, quando um *host* quer saber um endereço IP, pergunta para o *Local Name Server*. Se o mesmo não souber, passa a pergunta para outro *Name Server* e assim consecutivamente até que se chegue a uma resposta. Ao obter a resposta, a mesma é passada de volta até o *host* que originalmente havia feito a pergunta.
+
+Enquanto o método **iterativo** põe a carga de resolução de nomes no *Local Name Server* que vai iteranto pelos *Name Servers* até encontrar uma resposta, o método **recursivo** poria o peso da tarefa de resolução de nomes nos *Root Name Servers*, por onde passariam todos os requests do mundo.
+
+Porém, o *DNS* é implementado com *caching*, ou seja, os *Name Servers* guardam respostas para perguntas que responderam recentemente. Nesse caso o **método recursivo é vantajoso** pois ao passar a resposta do respondente até o *host* (do qual partiu a pergunta), a mesma é armazenada nos *caches* em todo o caminho. Logo, a partir daquele momento, toda vez que essa  chegar a um desses *Name Servers* do caminho, será respondida imediatamente.
 
 -----
 
 ## Questão 14
 
+Apenas o *Authoritative DNS server* `cos.ufrj.br` precisa saber o endereço IP do *Authoritative Name Server* `lab.cos.ufrj.br`.
 
+```
+Root DNS Servers
+│ 
+├── Top-level Domain (TLD) server: .br
+│    │
+│    ├── Authoritative DNS server: ufrj.br
+│         │
+│         ├── Authoritative DNS Server: cos.ufrj.br
+│              │
+│              ├── Authoritative DNS Server: lab.cos.ufrj.br
+│
+```
 
 -----
 
@@ -248,3 +267,30 @@ Em uma **DHT** (**Distributed Hash Table**), no momento em que um par **A** busc
 Ao utilizarmos *caching*, após a primeira busca o resultado (ou o endereço de quem sabe aquela faixa de resultados) pode ser armazenado por **A**. Assim, quando a mesma busca for repetida, o resulado é obtido de maneira muito mais rápida.
 
 -----
+
+## Extras:
+
+### 1 - Hierarquia DNS:
+
+```
+Root DNS Servers
+│ 
+├── Top-level Domain (TLD) server: .br
+│    │
+│    ├── Authoritative DNS server: ufrj.br
+│         │
+│         ├── Local Name Server: cos.ufrj.br
+│
+│
+├── Top-level Domain (TLD) server: .com
+│    │
+│    ├── Authoritative DNS server: yahoo.com
+│
+│ 
+├── Top-level Domain (TLD) server: .edu
+│    │
+│    ├── Authoritative DNS server: umass.edu
+│
+│ 
+...
+```
