@@ -231,6 +231,8 @@ Já na arquitetura **par-a-par** (P2P), todas as partes do sistema desempenham o
 
 ## Questão 20
 
+Em uma **DHT** (**Distributed Hash Table**), no momento em que um par **A** busca o valor de uma chave *k* que não conhece, passa a busca para o par seguinte e assim consecutivamente até que chegue em um par **B** que sabe a resposta e o valor associado a *k* para **A**. Caso **A** busque o mesmo valor posteriormente, o mesmo mecanismo é repetido.
 
+Ao utilizarmos *caching*, após a primeira busca o resultado (ou o endereço de quem sabe aquela faixa de resultados) pode ser armazenado por **A**. Assim, quando a mesma busca for repetida, o resulado é obtido de maneira muito mais rápida.
 
 -----
