@@ -228,7 +228,7 @@ Root DNS Servers
 
 ## Questão 15
 
-A estratégia das **CDNs** é disponibilizar o conteúdo mais disopnível para e próximo dos usuários, seja **dentro de redes de acesso** ou **perto de *POP*s** (*Points of Presence*, pontos nos quais *Internet Service Providers* se conectam), agilizando o envio do conteúdo aos mesmos.
+A estratégia das **CDNs** é disponibilizar o conteúdo mais próximo dos usuários, seja **dentro de redes de acesso** ou **perto de *POP*s** (*Points of Presence*, pontos nos quais *Internet Service Providers* se conectam), agilizando o envio do conteúdo aos mesmos.
 
 -----
 
@@ -244,7 +244,9 @@ Outra opção é responder ao cliete uma **lista de servidores CDN** da qual o m
 
 ## Questão 17
 
+Ao entrar no *swarm*, um cliente pode receber *peers* com partes muito distintas do arquivo, o que faz com que demore mais tempo para que ele tenha uma parte completa para começar a fazer o *upload*, consequentemente arriscando que alguns *peers* parem de enviar para o mesmo (*choking*).
 
+Além disso, em *swarms* muito grandes, há a possibilidade dos *peers* aleatórios serem geograficamente muito distantes, atrapalhando as taxas de transmissão e consequantemente podendo levaro ao *choke* do cliente.
 
 -----
 
