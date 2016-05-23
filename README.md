@@ -1,6 +1,9 @@
-# Lista 2 - Sistemas Distribuídos
+# Lista 2 - Sistemas Distribuídos - COS470
 
 -----
+
+Aluno: Marcos Seefelder de Assis Araujo
+Professor: Daniel Ratton Figueiredo
 
 -----
 
