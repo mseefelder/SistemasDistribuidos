@@ -167,7 +167,7 @@ O `signal(s)` de **semáforos** incrementa o semáforo `s`, premitindo que um se
 
 Já no caso de **monitores**, a função `signal(vc)` acorda uma *thread* bloqueada num `wait()` na *variável de condição* `vc`. 
 
-### Extra: `wait()` em Semáforos vs. Monitores
+#### Extra: `wait()` em Semáforos vs. Monitores
 
 Em **semáforos**, a função `wait(s)` decrementa o semáforo `s` se o mesmo `> 0`, e bloqueia caso contrário, esperando até que o mesmo seja incrementado por alguma *thread*.
 
@@ -179,7 +179,7 @@ Em **monitores**, a função `wait(vc)` bloqueia a *thread* esperando na *variá
 
 Na **semântica de Mesa**, ao chamar `signal()` a *thread* que está esperando na variável de condição passa para o estado *ready*, mas a *thread* que chamou `signal()` continua executando. Portanto, não é garantido que quando a *thread* que passou para *ready* entra em execução, a condição ainda é verdadeira.
 
-### Extra: *Hoare Monitors*
+#### Extra: *Hoare Monitors*
 
 Na **semântica de Hoare**, a chamada de `signal()` troca o contexto imediatamente, colocando em execução a *thread* que estava em wait. Dessa maneira, garante que a condição é verdadeira quando entra em execução.
 
@@ -211,15 +211,15 @@ Apenas o *Authoritative DNS server* `cos.ufrj.br` precisa saber o endereço IP d
 
 ```
 Root DNS Servers
-│ 
-├── Top-level Domain (TLD) server: .br
-│    │
-│    ├── Authoritative DNS server: ufrj.br
-│         │
-│         ├── Authoritative DNS Server: cos.ufrj.br
-│              │
-│              ├── Authoritative DNS Server: lab.cos.ufrj.br
-│
+|
+|-- Top-level Domain (TLD) server: .br
+|    |
+|    |-- Authoritative DNS server: ufrj.br
+|         |
+|         |-- Authoritative DNS Server: cos.ufrj.br
+|              |
+|              |-- Authoritative DNS Server: lab.cos.ufrj.br
+|
 ```
 
 -----
@@ -274,23 +274,20 @@ Ao utilizarmos *caching*, após a primeira busca o resultado (ou o endereço de 
 
 ```
 Root DNS Servers
-│ 
-├── Top-level Domain (TLD) server: .br
-│    │
-│    ├── Authoritative DNS server: ufrj.br
-│         │
-│         ├── Local Name Server: cos.ufrj.br
-│
-│
-├── Top-level Domain (TLD) server: .com
-│    │
-│    ├── Authoritative DNS server: yahoo.com
-│
-│ 
-├── Top-level Domain (TLD) server: .edu
-│    │
-│    ├── Authoritative DNS server: umass.edu
-│
-│ 
+|
+|-- Top-level Domain (TLD) server: .br
+|    |
+|    |-- Authoritative DNS server: ufrj.br
+|         |
+|         |-- Local Name Server: cos.ufrj.br
+|
+|-- Top-level Domain (TLD) server: .com
+|    |
+|    |-- Authoritative DNS server: yahoo.com
+|
+|-- Top-level Domain (TLD) server: .edu
+|    |
+|    |-- Authoritative DNS server: umass.edu
+|
 ...
 ```
