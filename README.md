@@ -1,5 +1,9 @@
 # Lista 2 - Sistemas Distribuídos
 
+-----
+
+-----
+
 ## Questão 1
 
 Os dois principais modelos de Inter Process Communication (IPC) são os de memória compartilhada e troca de mensagens.
@@ -15,6 +19,8 @@ As principais vantagens das trocas de mensagens é que o sistema operacional ofe
 
 * Memória compartilhada: Nesse modelo uma região de memória é mapeada para ser compartilhada entre dois processos. Diferente do caso de troca de mensagens, o sistema operacional não está envolvido nesse processo, e a região de memória compartilhada está **fora do *kernel space***. Isso acarreta numa desvantagem, que é a grande chance da ocorrência de *condições de corrida* no acesso dessa região, sendo necessária a **coordenação do acesso através de sincronização **.
 
+-----
+
 ## Questão 2
 
 Em se tratando de pipes, uma escrita (`write()`) bloqueante bloqueia quando não há espaço no *buffer* do *pipe*, enquanto uma não-bloqueante simplesmente retorna um valor de erro e a execução continua. No caso da leitura (`read()`), uma leitura bloqueante bloqueia até que haja algo para ler, equanto a não-bloqueante retorna um valor de erro no caso de não haver o que ler e a execução continua.
@@ -25,6 +31,8 @@ No caso do código, temos as seguintes possíveis combinações:
 * *Write* **bloqueante** & *Read* **não-bloqueante**: Temos uma situação parecida com a anterior, pois como `process()` pode demorar para retornar, é improvável que tente ler o *buffer* e não haja nada para ser lido. Caso isso acontecesse, o valor **m** lido em `process()` provavelmente seria preenchido com zeros, não garantindo que *P2* recebesse sempre valores enviados por *P1*;
 * *Write* **não-bloqueante** & *Read* **não-bloqueante**: Nesse caso pode ocorrer de *P1* tentar escrever com o *buffer* cheio e não bloquear. Numa situação dessas, a escrita não será feita e a execução de *P1* continuará normalmente. *P2* iria provavelmente receber apenas valores enviados por *P1*, mas não necessariamente receberia todos os valores que P1 tentou enviar. Com pouquíssima probabilidade (devido à demora de `process()`) poderia ocorrer de P2 ler e o *buffer*, acarretando numa situação descrita no tópico anterior;
 * *Write* **não-bloqueante** & *Read* **bloqueante**: Nesse caso pode ocorrer de *P1* tentar escrever com o *buffer* cheio e não bloquear. Numa situação dessas, a escrita não será feita e a execução de *P1* continuará normalmente. *P2* irá receber sempre valores enviados por *P1*, mas não necessariamente receberia todos os valores que P1 tentou enviar.
+
+-----
 
 ## Questão 3
 
@@ -39,9 +47,13 @@ Sistemas de com *threads* podem usá-las em dois modelos: *User-Level Threads* e
 
 Uma **possível desvantagem** de sistemas *multi-threaded* é que, como as implementações de *threads* aramazenam o mínimo possível de informação que permite a divisão da CPU entre diferentes *threads*, proteger o acesso inapropriado de dados pelas diversas *threads* é uma tarefa deixada para o programador.
 
+-----
+
 ## Questão 4
 
-Um sistema *multi-threaded* baseado em *user-level threads* é um processo que só roda em um núcleo de processamento de cada vez, pois as *threads* em nivel de usuário não são enxergadas pelo Sistema Operacional como unidades que podem ser escalonadas independentemente. Portanto, é de se esperar que o desempenho de tal sistema sem um computador multi-processado seja igual ao de um mono-processado no sentido de que o mesmo não aproveita a disponibilidade de múltiplos *cores* para a execução concomitante de *threads*.
+Um sistema *multi-threaded* baseado em *user-level threads* é um processo que só roda em um núcleo de processamento de cada vez, pois as ***threads* em nivel de usuário não são enxergadas pelo Sistema Operacional como unidades que podem ser escalonadas independentemente**. Portanto, é de se esperar que o desempenho de tal sistema sem um computador multi-processado seja igual ao de um mono-processado no sentido de que o mesmo **não aproveita a disponibilidade de múltiplos *cores* para a execução concomitante de *threads***.
+
+-----
 
 ## Questão 5
 
@@ -56,6 +68,8 @@ Pode ocorrer, por exemplo, um *deadlock* na seguinte situação:
 3. A *thread T2* faz uma chamada `acquire()` e executa a linha `lock->interested[this_thread] = 1`;
 
 A partir de agora, **ambas as *threads* ficam presas no loop de `while`**, pois ambas as posições de `lock->interested[]` são verdadeiras (`== 1`).
+
+-----
 
 ## Questão 7
 
@@ -78,11 +92,15 @@ release(bool lock) {
 }
 ```
 
+-----
+
 ## Questão 8
 
 Os padrões que podem ser impressos são sequências da combinação "ab", nessa ordem.
 
 Não pode haver *deadlock*, uma vez que, para escrever o "a", há de se passar em um semáforo binário (`s1`). Uma vez que esse semáforo foi passado ele só é reaberto após se passar por um segundo semáforo binário (`s2`), imprimir "b" e abrir o semáforo `s2`. Ambas as chamadas de `print()` estão dentro da região crítica de `s1` é serializada para acesso de uma *thread* por vez.
+
+-----
 
 ## Questão 9
 
@@ -127,48 +145,70 @@ void consumer()
 
 Nesse caso poderia ocorrer um *deadlock* na seguinte situação: Um consumidor é a primeira *thread C1* ativa e passa pelo `wait(mutex)`. Esse consumidor vai bloquear no `wait(full)` pois não há nenhum produto disponível. Todas as outras *threads* vão bloquear no primeiro `wait(mutex)`.
 
-
+-----
 
 ## Questão 10
 
+O `signal(s)` de **semáforos** incrementa o semáforo `s`, premitindo que um semáforo bloqueado entre na *região crítica*. Já no caso de **monitores**, a função `signal(vc)` acorda uma *thread* bloqueada num `wait()` na *variável de condição* `vc`. 
 
+-----
 
 ## Questão 11
 
 
 
+-----
+
 ## Questão 12
 
 
+
+-----
 
 ## Questão 13
 
 
 
+-----
+
 ## Questão 14
 
 
+
+-----
 
 ## Questão 15
 
 
 
+-----
+
 ## Questão 16
 
 
+
+-----
 
 ## Questão 17
 
 
 
+-----
+
 ## Questão 18
 
 
+
+-----
 
 ## Questão 19
 
 
 
+-----
+
 ## Questão 20
 
 
+
+-----
