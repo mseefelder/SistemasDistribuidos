@@ -159,7 +159,7 @@ Nesse caso poderia ocorrer um *deadlock* na seguinte situação:
 4. Isso ocorre consecutivamente até *P[N]*, fazendo com que `empty == 0` e `full == 0`;
 5. Mais um produtor *P[N+1]* entra, passa por `wait(mutex)` e bloqueia em `wait(empty)`.
 
-Nesse caso nenhum consumidor vai conseguir passar de `wait(full)`, pois nunca houve uma chamada `signal(full)` e nenhum produtor vai conseguir passar de `wait(mutex)`, pois *P[N+1]* está na região crítica definida pelo mesmo.
+Nesse caso nenhum consumidor vai conseguir passar de `wait(full)`, pois nunca houve uma chamada `signal(full)`. E se algum dos *N* produtores iniciais voltar a executar e chamar `signal(full)`, os consumidores e consumidores vão travar no `wait(mutex)`, pois *P[N+1]* está na região crítica definida pelo mesmo.
 
 -----
 
