@@ -133,8 +133,8 @@ Consumidor
 ```
 void consumer()
 {
-	wait(mutex)
 	wait(full)
+	wait(mutex)
 		//região crítica:
 		//retira produto
 	signal(mutex)
@@ -143,7 +143,15 @@ void consumer()
 }
 ```
 
-Nesse caso poderia ocorrer um *deadlock* na seguinte situação: Um consumidor é a primeira *thread C1* ativa e passa pelo `wait(mutex)`. Esse consumidor vai bloquear no `wait(full)` pois não há nenhum produto disponível. Todas as outras *threads* vão bloquear no primeiro `wait(mutex)`.
+Nesse caso poderia ocorrer um *deadlock* na seguinte situação: 
+
+1. Um produtor *P[1]* entra nos dois semáforos `wait(mutex)` e `wait(empty)`, adiciona um produto e chama `signal(mutex)`;
+2. Ocorre uma troca de contexto e entra o produtor *P[2]*;
+3. *P[2]* e faz exatamente o que foi feito por *P[1]*;
+4. Isso ocorre consecutivamente até *P[N]*, fazendo com que `empty == 0` e `full == 0`;
+5. Mais um produtor *P[N+1]* entra, passa por `wait(mutex)` e bloqueia em `wait(empty)`.
+
+Nesse caso nenhum consumidor vai conseguir passar de `wait(full)`, pois nunca houve uma chamada `signal(full)` e nenhum produtor vai conseguir passar de `wait(mutex)`, pois *P[N+1]* está na região crítica definida pelo mesmo.
 
 -----
 
@@ -173,7 +181,9 @@ Na **semântica de Hoare**, a chamada de `signal()` troca o contexto imediatamen
 
 ## Questão 12
 
+Na arquitetura **cliente-servidor** existem dois papéis distintos do sistema, um dos quais é o *servidor* (normalmente uma só intância) ao qual múltiplos *clientes* se conectam. Cada um dos dois (*cliente* e *servidor*) desempenham papéis diferentes.
 
+Já na arquitetura **par-a-par** (P2P), todas as partes do sistema desempenham o mesmo papel (ou papéis semelhantes). Essas partes que conectam entre si de forma bidirecional, formando uma malha. Nesse tipo de sistema todos os participantes desempenham ao mesmo tempo o que seria o papel de cliente e servidor, e a demanda de um cliente pode ser suprida pelos demais, tornando o sistema mais escalável e distribuído.
 
 -----
 
