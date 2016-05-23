@@ -63,6 +63,8 @@ Um sistema *multi-threaded* baseado em *user-level threads* é um processo que s
 
 
 
+-----
+
 ## Questão 6
 
 Pode ocorrer, por exemplo, um *deadlock* na seguinte situação:
