@@ -226,7 +226,7 @@ Root DNS Servers
 
 ## Questão 15
 
-
+A estratégia das **CDNs** é disponibilizar o conteúdo mais disopnível para e próximo dos usuários, seja **dentro de redes de acesso** ou **perto de *POP*s** (*Points of Presence*, pontos nos quais *Internet Service Providers* se conectam), agilizando o envio do conteúdo aos mesmos.
 
 -----
 
