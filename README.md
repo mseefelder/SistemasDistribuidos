@@ -149,13 +149,25 @@ Nesse caso poderia ocorrer um *deadlock* na seguinte situação: Um consumidor �
 
 ## Questão 10
 
-O `signal(s)` de **semáforos** incrementa o semáforo `s`, premitindo que um semáforo bloqueado entre na *região crítica*. Já no caso de **monitores**, a função `signal(vc)` acorda uma *thread* bloqueada num `wait()` na *variável de condição* `vc`. 
+O `signal(s)` de **semáforos** incrementa o semáforo `s`, premitindo que um semáforo bloqueado entre na *região crítica*. 
+
+Já no caso de **monitores**, a função `signal(vc)` acorda uma *thread* bloqueada num `wait()` na *variável de condição* `vc`. 
+
+### Extra: `wait()` em Semáforos vs. Monitores
+
+Em **semáforos**, a função `wait(s)` decrementa o semáforo `s` se o mesmo `> 0`, e bloqueia caso contrário, esperando até que o mesmo seja incrementado por alguma *thread*.
+
+Em **monitores**, a função `wait(vc)` bloqueia a *thread* esperando na *variável de condição* `vc`, passa a região crítica para outra *thread* e espera até alguma *thread* a acordar com um `signal(vc)`.
 
 -----
 
 ## Questão 11
 
+Na **semântica de Mesa**, ao chamar `signal()` a *thread* que está esperando na variável de condição passa para o estado *ready*, mas a *thread* que chamou `signal()` continua executando. Portanto, não é garantido que quando a *thread* que passou para *ready* entra em execução, a condição ainda é verdadeira.
 
+### Extra: *Hoare Monitors*
+
+Na **semântica de Hoare**, a chamada de `signal()` troca o contexto imediatamente, colocando em execução a *thread* que estava em wait. Dessa maneira, garante que a condição é verdadeira quando entra em execução.
 
 -----
 
