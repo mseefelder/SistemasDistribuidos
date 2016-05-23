@@ -2,8 +2,9 @@
 
 -----
 
-Aluno: Marcos Seefelder de Assis Araujo
-Professor: Daniel Ratton Figueiredo
+**Aluno**: Marcos Seefelder de Assis Araujo
+
+**Professor**: Daniel Ratton Figueiredo
 
 -----
 
