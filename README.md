@@ -234,7 +234,11 @@ A estratégia das **CDNs** é disponibilizar o conteúdo mais disopnível para e
 
 ## Questão 16
 
+Ao solicitar a um conteúdo de uma página que está disponível em uma **CDN** o **Authoritative Name Server** que serve a página retorna a URL do conteúdo na **CDN**. Então essa **URL é resolvida pelo Authoritative Name Server da CDN** e o cliente usa o endereço resolvido para requisitar o conteúdo.
 
+A resolução da URL do conteúdo pelo **Authoritative Name Server da CDN** pode ser feita escolhendo o nó da **CDN** mais próximo geograficamente do cliente ou com o menor atraso até o mesmo. Para a segunda opção os nós da **CDN** periodicamente fazem *ping* para os pontos de acesso dos **ISPs** (*Internet Service Providers*) e mantém os resultados no **DNS da CDN**.
+
+Outra opção é responder ao cliete uma **lista de servidores CDN** da qual o mesmo vai escolher qual usar baseando-se, por exemplo, no resultado de *pings* para os seridores da lista.
 
 -----
 
