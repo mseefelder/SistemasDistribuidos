@@ -65,7 +65,15 @@ Um sistema *multi-threaded* baseado em *user-level threads* é um processo que s
 
 Uma consição de corrida ocorre quando a consistência de um resultado depende que uma determinada sequência de eventos ocorra e devido ao paralelismo podem ocorrer sequências alternativas, resultando em inconsistência e *bugs*.
 
+```
+saque (conta, valor) {
+	saldo_anterior = get_saldo(conta);
+	saldo_atual = saldo_anterior - valor;
+	set_saldo(conta, saldo_atual);
+}
+```
 
+Imagine que duas *threads* executam a função `saque()` para a mesma conta ao mesmo tempo. Caso a primeira *thread* *T1* execute `saldo_anterior = get_saldo(conta);` e depois ocorra uma mudança de contexto e a segunda *thread T2* execute a mesma linha, apenas um dos saques será registrado, porém ambos serão realizados, tornando o sistema inconsistente.
 
 -----
 
