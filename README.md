@@ -63,6 +63,8 @@ Um sistema *multi-threaded* baseado em *user-level threads* é um processo que s
 
 ## Questão 5
 
+Uma consição de corrida ocorre quando a consistência de um resultado depende que uma determinada sequência de eventos ocorra e devido ao paralelismo podem ocorrer sequências alternativas, resultando em inconsistência e *bugs*.
+
 
 
 -----
@@ -238,7 +240,7 @@ Ao solicitar a um conteúdo de uma página que está disponível em uma **CDN** 
 
 A resolução da URL do conteúdo pelo **Authoritative Name Server da CDN** pode ser feita escolhendo o nó da **CDN** mais próximo geograficamente do cliente ou com o menor atraso até o mesmo. Para a segunda opção os nós da **CDN** periodicamente fazem *ping* para os pontos de acesso dos **ISPs** (*Internet Service Providers*) e mantém os resultados no **DNS da CDN**.
 
-Outra opção é responder ao cliete uma **lista de servidores CDN** da qual o mesmo vai escolher qual usar baseando-se, por exemplo, no resultado de *pings* para os seridores da lista.
+Outra opção é responder ao cliente uma **lista de servidores CDN** da qual o mesmo vai escolher qual usar baseando-se, por exemplo, no resultado de *pings* para os seridores da lista.
 
 -----
 
@@ -264,7 +266,7 @@ De qualquer maneira o download provavelmente seria muito mais lento do que se fo
 
 ## Questão 19
 
-
+Através da *função de hash* o *peer* entrante descobre qual sua posição na **DHT**, se conecta com algum nó da **DHT** e pergunta quais seriam os antecessor e sucessor de sua posição. Quando recebe a resposta o *peer* entrante atualiza seu sucessor e notifica o antecessor para que atualize o sucessor para si próprio.
 
 -----
 
