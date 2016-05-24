@@ -10,19 +10,18 @@
 
 ## Questão 1
 
-Os dois principais modelos de Inter Process Communication (IPC) são os de memória compartilhada e troca de mensagens.
+Os dois principais modelos de *Inter Process Communication* (**IPC**) são os de **memória compartilhada** e **troca de mensagens**.
 
-* Troca de mensagens: Nesse modelo, os processos trocam mensagens através de chamadas de sistema `send()` e `receive()` que põe e retiram mensagens de uma fila armazenada em *kernel space*. O enlace pode ser direto ou indireto e a troca de mensagens pode ser síncrona ou assíncrona:
-	* Direto/Indireto:
+* **Troca de mensagens**: Nesse modelo, os processos trocam mensagens através de chamadas de sistema `send()` e `receive()` que põe e retiram mensagens de uma fila armazenada em *kernel space*. O enlace pode ser direto ou indireto e a troca de mensagens pode ser síncrona ou assíncrona:
+	* *Direto/Indireto*:
 		* No caso do enlace **direto**, tanto a **origem** quanto o **destino devem ser identificados** nas chamadas de `send` e `receive`. Nesse caso os enlaces são **unidirecionais** e **criados automaticamente** (realizado com o uso de **sinais** por exemplo);
 		* No caso **indireto**, as mensagens sao enviadas para e lidas a partir de uma **"caixa postal"**. Nesse caso, as caixas postais devem ser **criadas explicitamente** e são **bidirecionais** (realizado com **sockets** ou **pipes**, por exemplo); 
-	* Síncrono/Assíncrono:
+	* *Síncrono/Assíncrono*:
 		* No caso **síncrono**, as **chamadas são bloqueantes**, ou seja, o receptor espera a mensagem chegar e o emissor espera a mensagem ser recebida. Durante a espera, o processo fica em *Waiting*;
 		* No caso **assíncrono**, as **chamadas são não-bloqueantes**, ou seja, após as chamadas os processos continuam executando normalmente. Nessa situação as mensagens são armazenadas em um *buffer* em *kernel space* de tamanho limitado, que pode ser controlado pelo processo. 
-* Memória compartilhada: Nesse modelo uma região de memória é mapeada para ser compartilhada entre dois processos. Diferente do caso de troca de mensagens, o sistema operacional não está envolvido nesse processo, e a região de memória compartilhada está **fora do *kernel space***. Isso acarreta numa desvantagem, que é a grande chance da ocorrência de *condições de corrida* no acesso dessa região, sendo necessária a **coordenação do acesso através de sincronização**.
+* **Memória compartilhada**: Nesse modelo uma região de memória é mapeada para ser compartilhada entre dois processos. Diferente do caso de troca de mensagens, o sistema operacional não está envolvido nesse processo, e a região de memória compartilhada está **fora do *kernel space***. Isso acarreta numa desvantagem, que é a grande chance da ocorrência de *condições de corrida* no acesso dessa região, sendo necessária a **coordenação do acesso através de sincronização**.
 
 As principais vantagens das trocas de mensagens é que o sistema operacional oferece as chamadas que facilitam sua realização e administra aspectos como os *buffers* da troca assíncrona, por exemplo. Uma desvantagem é que tudo é baseado em chamadas de sistema, que tomam bastante tempo de execução.
-
 
 -----
 
@@ -34,16 +33,16 @@ No caso do código, temos as seguintes possíveis combinações:
 
 * *Write* **bloqueante** & *Read* **bloqueante**: *P1* escreve continuamente no *pipe* e *P2* lê sempre que há algo para ser lido. Como a função `process()` pode demorar um pouco para retornar é improvável que não haja nada para ser lido por *P2*, mas pode ocorrer do *buffer* ficar cheio (por *P2* não dar conta da velocidade com que *P1* o preenche). Nesse caso, *P1* vai bloquear até que haja espaço para a escrita no *pipe*. A função `process()` sempre receberá algum parâmetro que *P1* enviou;
 * *Write* **bloqueante** & *Read* **não-bloqueante**: Temos uma situação parecida com a anterior, pois como `process()` pode demorar para retornar, é improvável que tente ler o *buffer* e não haja nada para ser lido. Caso isso acontecesse, o valor **m** lido em `process()` provavelmente seria preenchido com zeros, não garantindo que *P2* recebesse sempre valores enviados por *P1*;
-* *Write* **não-bloqueante** & *Read* **não-bloqueante**: Nesse caso pode ocorrer de *P1* tentar escrever com o *buffer* cheio e não bloquear. Numa situação dessas, a escrita não será feita e a execução de *P1* continuará normalmente. *P2* iria provavelmente receber apenas valores enviados por *P1*, mas não necessariamente receberia todos os valores que P1 tentou enviar. Com pouquíssima probabilidade (devido à demora de `process()`) poderia ocorrer de P2 ler e o *buffer*, acarretando numa situação descrita no tópico anterior;
+* *Write* **não-bloqueante** & *Read* **não-bloqueante**: Nesse caso pode ocorrer de *P1* tentar escrever com o *buffer* cheio e não bloquear. Numa situação dessas, a escrita não será feita e a execução de *P1* continuará normalmente. *P2* iria provavelmente receber apenas valores enviados por *P1*, mas não necessariamente receberia todos os valores que P1 tentou enviar. Com pouquíssima probabilidade (devido à demora de `process()`) poderia ocorrer de P2 ler e o *buffer* estar vazio, acarretando numa situação descrita no tópico anterior;
 * *Write* **não-bloqueante** & *Read* **bloqueante**: Nesse caso pode ocorrer de *P1* tentar escrever com o *buffer* cheio e não bloquear. Numa situação dessas, a escrita não será feita e a execução de *P1* continuará normalmente. *P2* irá receber sempre valores enviados por *P1*, mas não necessariamente receberia todos os valores que P1 tentou enviar.
 
 -----
 
 ## Questão 3
 
-Cada processo é associado a um **PCB** (Process Control Block), grande estrutura de dados mantida para armazenar todo o estado do processo, o que é bem custoso para o Sistema Operacional. Além disso a troca de contexto entre processos é uma operação extremamente custosa para o Sistema Operacional. Um sistema *multi-process* envolve todos esses problemas além das diversas trocas de contexto que são necessárias para realizar a comunicação entre processos.
+Cada processo é associado a um **PCB** (Process Control Block), grande estrutura de dados mantida para armazenar todo o estado do processo, o que é bem custoso para o Sistema Operacional. Além disso a troca de contexto entre processos é uma operação extremamente pesada para o Sistema Operacional. Um sistema *multi-process* envolve todos esses problemas, pois pra cada processo temos um **PCB** e são diversas trocas de contexto.
 
-Por outro lado, num sistema *multi-threaded*, múltiplas threads compartilham um único **PCB**, por sua vez tendo um custo menor para o Sistema Operacional em questões de consumo de memória. Além disso, um mesmo processo pode aproveitar mais *cores* do processador e a administração de atividades concorrentes é facilitada. 
+Por outro lado, num sistema *multi-threaded*, múltiplas threads compartilham um único **PCB**, por sua vez tendo um custo menor para o Sistema Operacional em questões de consumo de memória. Dependendo da implementação, a troca de contexto também é consideravelmente mais leve (em *user-level threads*). Além disso, um mesmo processo pode aproveitar mais *cores* do processador e a administração de atividades concorrentes é facilitada. 
 
 Sistemas de com *threads* podem usá-las em dois modelos: *User-Level Threads* e *Kernel-Level Threads*:
 
@@ -63,7 +62,7 @@ Um sistema *multi-threaded* baseado em *user-level threads* é um processo que s
 
 ## Questão 5
 
-Uma consição de corrida ocorre quando a consistência de um resultado depende que uma determinada sequência de eventos ocorra e devido ao paralelismo podem ocorrer sequências alternativas, resultando em inconsistência e *bugs*.
+Uma condição de corrida ocorre quando a consistência de um resultado depende que uma determinada sequência de eventos ocorra e, devido ao paralelismo, podem ocorrer sequências alternativas, resultando em inconsistência e *bugs*.
 
 ```
 saque (conta, valor) {
@@ -124,7 +123,7 @@ Não pode haver *deadlock*, uma vez que, para escrever o "a", há de se passar e
 
 O código ficaria similar ao apresentado a seguir:
 
-Global
+Global:
 
 ```
 semaphore mutex = 0;
@@ -132,7 +131,7 @@ semaphore empty = N;
 semaphore full = 0;
 ```
 
-Produtor
+Produtor:
 
 ```
 void producer()
@@ -146,7 +145,7 @@ void producer()
 }
 ```
 
-Consumidor
+Consumidor:
 
 ```
 void consumer()
@@ -169,7 +168,7 @@ Nesse caso poderia ocorrer um *deadlock* na seguinte situação:
 4. Isso ocorre consecutivamente até *P[N]*, fazendo com que `empty == 0` e `full == 0`;
 5. Mais um produtor *P[N+1]* entra, passa por `wait(mutex)` e bloqueia em `wait(empty)`.
 
-Nesse caso nenhum consumidor vai conseguir passar de `wait(full)`, pois nunca houve uma chamada `signal(full)`. E se algum dos *N* produtores iniciais voltar a executar e chamar `signal(full)`, os consumidores e consumidores vão travar no `wait(mutex)`, pois *P[N+1]* está na região crítica definida pelo mesmo.
+Nesse caso nenhum consumidor vai conseguir passar de `wait(full)`, pois nunca houve uma chamada `signal(full)`. E se algum dos *N* produtores iniciais voltar a executar e chamar `signal(full)`, os produtores e consumidores vão travar no `wait(mutex)`, pois *P[N+1]* está na região crítica definida pelo mesmo.
 
 -----
 
@@ -199,7 +198,7 @@ Na **semântica de Hoare**, a chamada de `signal()` troca o contexto imediatamen
 
 ## Questão 12
 
-Na arquitetura **cliente-servidor** existem dois papéis distintos do sistema, um dos quais é o *servidor* (normalmente uma só intância) ao qual múltiplos *clientes* se conectam. Cada um dos dois (*cliente* e *servidor*) desempenham papéis diferentes.
+Na arquitetura **cliente-servidor** existem dois papéis distintos do sistema, um dos quais é o *servidor* (normalmente uma só intância) ao qual múltiplos *clientes* se conectam. Cada um dos dois (*cliente* e *servidor*) executam programas diferentes.
 
 Já na arquitetura **par-a-par** (P2P), todas as partes do sistema desempenham o mesmo papel (ou papéis semelhantes). Essas partes que conectam entre si de forma bidirecional, formando uma malha. Nesse tipo de sistema todos os participantes desempenham ao mesmo tempo o que seria o papel de cliente e servidor, e a demanda de um cliente pode ser suprida pelos demais, tornando o sistema mais escalável e distribuído.
 
@@ -211,9 +210,9 @@ Na **forma iterativa**, quando um *host* quer saber um endereço IP, pergunta pa
 
 Na **forma recursiva**, quando um *host* quer saber um endereço IP, pergunta para o *Local Name Server*. Se o mesmo não souber, passa a pergunta para outro *Name Server* e assim consecutivamente até que se chegue a uma resposta. Ao obter a resposta, a mesma é passada de volta até o *host* que originalmente havia feito a pergunta.
 
-Enquanto o método **iterativo** põe a carga de resolução de nomes no *Local Name Server* que vai iteranto pelos *Name Servers* até encontrar uma resposta, o método **recursivo** poria o peso da tarefa de resolução de nomes nos *Root Name Servers*, por onde passariam todos os requests do mundo.
+Enquanto o método **iterativo** põe a carga de resolução de nomes no *Local Name Server* que vai iterando pelos *Name Servers* até encontrar uma resposta, o método **recursivo** poria o peso da tarefa de resolução de nomes nos *Root Name Servers*, por onde passariam todos os requests do mundo.
 
-Porém, o *DNS* é implementado com *caching*, ou seja, os *Name Servers* guardam respostas para perguntas que responderam recentemente. Nesse caso o **método recursivo é vantajoso** pois ao passar a resposta do respondente até o *host* (do qual partiu a pergunta), a mesma é armazenada nos *caches* em todo o caminho. Logo, a partir daquele momento, toda vez que essa  chegar a um desses *Name Servers* do caminho, será respondida imediatamente.
+Porém, o *DNS* é implementado com *caching*, ou seja, os *Name Servers* guardam respostas para perguntas que responderam recentemente. Nesse caso o **método recursivo é vantajoso** pois ao passar a resposta do respondente até o *host* (do qual partiu a pergunta), a mesma é armazenada nos *caches* em todo o caminho. Logo, a partir daquele momento, toda vez que essa  chegar a um desses *Name Servers* do caminho, será respondida imediatamente. Assim, a sobrecarga nos *Root Name Servers* desaparece, pois a maioria dos pedidos de resolução vai encontrar uma resposta sem precisar chegar a um *Root Name Server*.
 
 -----
 
@@ -246,7 +245,7 @@ A estratégia das **CDNs** é disponibilizar o conteúdo mais próximo dos usuá
 
 Ao solicitar a um conteúdo de uma página que está disponível em uma **CDN** o **Authoritative Name Server** que serve a página retorna a URL do conteúdo na **CDN**. Então essa **URL é resolvida pelo Authoritative Name Server da CDN** e o cliente usa o endereço resolvido para requisitar o conteúdo.
 
-A resolução da URL do conteúdo pelo **Authoritative Name Server da CDN** pode ser feita escolhendo o nó da **CDN** mais próximo geograficamente do cliente ou com o menor atraso até o mesmo. Para a segunda opção os nós da **CDN** periodicamente fazem *ping* para os pontos de acesso dos **ISPs** (*Internet Service Providers*) e mantém os resultados no **DNS da CDN**.
+A resolução da URL do conteúdo pelo **Authoritative Name Server da CDN** pode ser feita escolhendo o nó da **CDN** mais próximo geograficamente do cliente ou com o menor atraso até o mesmo, por exemplo. Para a segunda opção os nós da **CDN** periodicamente fazem *ping* para os pontos de acesso dos **ISPs** (*Internet Service Providers*) e mantém os resultados no **DNS da CDN**.
 
 Outra opção é responder ao cliente uma **lista de servidores CDN** da qual o mesmo vai escolher qual usar baseando-se, por exemplo, no resultado de *pings* para os seridores da lista.
 
@@ -256,7 +255,7 @@ Outra opção é responder ao cliente uma **lista de servidores CDN** da qual o 
 
 Ao entrar no *swarm*, um cliente pode receber *peers* com partes muito distintas do arquivo, o que faz com que demore mais tempo para que ele tenha uma parte completa para começar a fazer o *upload*, consequentemente arriscando que alguns *peers* parem de enviar para o mesmo (*choking*).
 
-Além disso, em *swarms* muito grandes, há a possibilidade dos *peers* aleatórios serem geograficamente muito distantes, atrapalhando as taxas de transmissão e consequantemente podendo levaro ao *choke* do cliente.
+Além disso, em *swarms* muito grandes, há a possibilidade dos *peers* aleatórios serem geograficamente muito distantes, atrapalhando as taxas de transmissão e consequentemente podendo levar ao *choke* do cliente.
 
 -----
 
@@ -264,7 +263,7 @@ Além disso, em *swarms* muito grandes, há a possibilidade dos *peers* aleatór
 
 Sim, é possível, porém o cliente alterado depende de *optimistic unchokes* e/ou de *seeders* para receber seus *chunks*:
 
-* Da maneira que o protocolo BitTorrent funciona, de forma resumida, os *peers* que recebem *chunks* (pedaços dos arquivos solicitados) são aqueles que enviam *chunks* numa taxa mais alta para seus *peers*. Porém, a cada 30 segundos um *peer* aleatório é escolhido e passa a receber *chunks* (*optimistic unchoke*), o que só continua caso o mesmo corresponda enviando *chunks* a uma taxa alta.
+* Da maneira que o protocolo BitTorrent funciona, de forma resumida, os *peers* que recebem *chunks* (pedaços dos arquivos solicitados) são aqueles que enviam *chunks* numa taxa mais alta para seus *peers* (a taxa de *upload* é o importante para manter uma  conexão). Porém, a cada 30 segundos um *peer* aleatório é escolhido e passa a receber *chunks* (*optimistic unchoke*), o que só continua caso o mesmo corresponda enviando *chunks* a uma taxa alta.
 
 * Uma excessão é o caso de clientes que já possuem o arquivo inteiro (*seeders*), seus *peers* são escolhidos de acordo com a velocidade de *upload* que o cliente consegue manter com o *peer*.
 
@@ -274,7 +273,7 @@ De qualquer maneira o download provavelmente seria muito mais lento do que se fo
 
 ## Questão 19
 
-Através da *função de hash* o *peer* entrante descobre qual sua posição na **DHT**, se conecta com algum nó da **DHT** e pergunta quais seriam os antecessor e sucessor de sua posição. Quando recebe a resposta o *peer* entrante atualiza seu sucessor e notifica o antecessor para que atualize o sucessor para si próprio.
+Através da *função de hash* o *peer* entrante descobre qual sua posição na **DHT**, se conecta com algum nó da **DHT** e pergunta quais seriam os antecessor e sucessor de sua posição. Quando recebe a resposta o *peer* entrante atualiza seu sucessor e notifica o antecessor para que atualize o sucessor para si próprio (o entrante).
 
 -----
 
@@ -282,7 +281,7 @@ Através da *função de hash* o *peer* entrante descobre qual sua posição na 
 
 Em uma **DHT** (**Distributed Hash Table**), no momento em que um par **A** busca o valor de uma chave *k* que não conhece, passa a busca para o par seguinte e assim consecutivamente até que chegue em um par **B** que sabe a resposta e o valor associado a *k* para **A**. Caso **A** busque o mesmo valor posteriormente, o mesmo mecanismo é repetido.
 
-Ao utilizarmos *caching*, após a primeira busca o resultado (ou o endereço de quem sabe aquela faixa de resultados) pode ser armazenado por **A**. Assim, quando a mesma busca for repetida, o resulado é obtido de maneira muito mais rápida.
+Ao utilizarmos *caching*, após a primeira busca o resultado (ou o endereço de quem sabe aquela faixa de resultados) pode ser armazenado por **A**. Assim, quando a mesma busca for repetida, o resultado é obtido de maneira muito mais rápida.
 
 -----
 
